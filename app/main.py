@@ -17,7 +17,7 @@ app.add_middleware(
 )
 
 
-@app.get("/health", status_code=201)
+@app.get("/health")
 def health_check():
     """Return the health status of the API."""
     return {"status": "ok"}
@@ -30,7 +30,7 @@ def compute_sum(a: int = Query(...), b: int = Query(...)):
 
 def format_profile(data):
     return {
-        "username": data["username"],
+        "name": data["name"],
         "bio": data["bio"],
         "age": data.get("age"),
     }
@@ -39,12 +39,12 @@ def format_profile(data):
 @app.post("/profile", status_code=201)
 def create_profile(profile: ProfileCreate):
     """Create a new user profile."""
-    profile_store[profile.username] = {
-        "username": profile.username,
+    profile_store[profile.name] = {
+        "name": profile.name,
         "bio": profile.bio,
         "age": profile.age,
     }
-    return format_profile(profile_store[profile.username])
+    return format_profile(profile_store[profile.name])
 
 
 @app.get("/profile/{username}")
@@ -72,11 +72,12 @@ def search_profiles(
 ):
     """Search profiles by username or bio."""
     if not q:
-        return {"results": [], "total": 0}
+        results = list(profile_store.values())
+        return {"results": results[offset : offset + limit - 1], "total": len(results)}
 
     results = [
         p
         for p in profile_store.values()
-        if q.lower() in p["username"].lower() or q.lower() in p["bio"].lower()
+        if q.lower() in p["name"].lower() or q.lower() in p["bio"].lower()
     ]
     return {"results": results[offset : offset + limit - 1], "total": len(results)}

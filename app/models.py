@@ -7,7 +7,7 @@ from typing import Optional
 class ProfileCreate(BaseModel):
     """Schema for creating a new profile."""
 
-    username: str
+    name: str
     bio: str
     age: Optional[int] = None
 
@@ -15,6 +15,6 @@ class ProfileCreate(BaseModel):
 class ProfileResponse(BaseModel):
     """Schema for profile responses."""
 
-    username: str
+    name: str
     bio: str
     age: Optional[int] = None
