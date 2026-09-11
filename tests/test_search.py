@@ -9,9 +9,9 @@ client = TestClient(app)
 
 
 def test_search_with_query():
-    profile_store["alice"] = {"username": "alice", "bio": "dev"}
-    profile_store["alex"] = {"username": "alex", "bio": "designer"}
-    profile_store["bob"] = {"username": "bob", "bio": "manager"}
+    profile_store["alice"] = {"name": "alice", "bio": "dev"}
+    profile_store["alex"] = {"name": "alex", "bio": "designer"}
+    profile_store["bob"] = {"name": "bob", "bio": "manager"}
 
     response = client.get("/search?q=al")
     data = response.json()
@@ -20,7 +20,7 @@ def test_search_with_query():
 
 
 def test_search_empty_query():
-    profile_store["carol"] = {"username": "carol", "bio": "tester"}
+    profile_store["carol"] = {"name": "carol", "bio": "tester"}
     response = client.get("/search?q=")
     data = response.json()
     assert data["total"] > 0
